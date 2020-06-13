@@ -42,8 +42,9 @@ To keep our promise of KISS, I am going to use Dynamic Provisioned Storage to cr
 Lets see this in action
 
 # Create a PV with this configuration
-/ apiVersion: v1
-/ kind: PersistentVolume
+
+\ apiVersion: v1
+\ kind: PersistentVolume
 metadata:
  name: dbvolume
 spec:
