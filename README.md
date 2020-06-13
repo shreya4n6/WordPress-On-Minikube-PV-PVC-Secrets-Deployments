@@ -118,17 +118,18 @@ Lets create a claim for the above volumes we created, Shall We 😀
 
 # PVC for WordPress named wppvc.yaml
 
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
- name: wpclaim
-spec:
- storageClassName: slow
- accessModes:
- - ReadWriteOnce
- resources:
-  requests:
-   storage: 1Gi
+*apiVersion: v1
+*kind: PersistentVolumeClaim
+*metadata:
+ *name: wpclaim
+*spec:
+ *storageClassName: slow
+ *accessModes:
+ *- ReadWriteOnce
+ *resources:
+  *requests:
+   *storage: 1Gi
+   
 kubectl create -f wppvc.yaml
 Simlarly, Creating a PVC for MySQL named sqlpvc.yaml
 
@@ -143,6 +144,7 @@ spec:
  resources:
   requests:
    storage: 1Gi
+   
 **kubectl create -f sqlpvc.yaml
 Getting PVC’s we just created
 **kubectl get pvc
