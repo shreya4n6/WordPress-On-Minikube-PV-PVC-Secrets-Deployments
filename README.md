@@ -10,7 +10,7 @@ Installing WordPress On Kubernetes.
 4. Creating A Deployment Of WordPress:4.8-apache Pod, Attaching the Volumes & Putting Database Details Using Environment variables.
 5. Exposing WordPress Deployment with Service Type NodePort
 
-Prerequisites
+# Prerequisites
 
-Minikube Installed
-Kubectl configured with Minikube
+# Minikube Installed
+# Kubectl configured with Minikube
