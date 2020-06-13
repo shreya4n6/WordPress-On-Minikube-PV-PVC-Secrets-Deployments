@@ -118,17 +118,17 @@ Lets create a claim for the above volumes we created, Shall We 😀
 
 # PVC for WordPress named wppvc.yaml
 
-*apiVersion: v1
-*kind: PersistentVolumeClaim
-*metadata:
- *name: wpclaim
-*spec:
- *storageClassName: slow
- *accessModes:
- *- ReadWriteOnce
- *resources:
-  *requests:
-   *storage: 1Gi
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: wpclaim
+spec:
+ storageClassName: slow
+ accessModes:
+ - ReadWriteOnce
+ resources:
+  requests:
+   storage: 1Gi
    
 kubectl create -f wppvc.yaml
 Simlarly, Creating a PVC for MySQL named sqlpvc.yaml
@@ -166,7 +166,7 @@ Deployments is also an api- resource provided by Kubernetes that allows to descr
 
 Lets get started by creating a Deployment of MySQL named wpdb.yaml . I hope you guys are still doing with me 😀
 
-apiVersion: apps/v1
+apiVersion: apps/v1 /n
 kind: Deployment
 metadata:
  labels:
