@@ -61,14 +61,28 @@ Understading few parameters used in here:
 
 # accessModes: Different resource providers provide different access modes based on the capabilities (remember every storage class provider have different capabilities). Different accessModes are:
 
-**ReadWriteOnce: the volume can be mounted as read-write by a single node
-**ReadOnlyMany: the volume can be mounted read-only by many nodes
-**ReadWriteMany: the volume can be mounted as read-write by many nodes
+**ReadWriteOnce: 
+
+the volume can be mounted as read-write by a single node
+**ReadOnlyMany: 
+
+the volume can be mounted read-only by many nodes
+**ReadWriteMany: 
+
+the volume can be mounted as read-write by many nodes
 (Since we are using hostPath as a Volume Plugin we are limited to ReadWriteOnce )
-**persistentVolumeReclaimPolicy: Reclaim policy is what happens to the data stored in PV when PVC is deleted. Different Reclaim Policies Are:
-**Retain: PV will continue to retain even if PVC is deleted.
-Delete: PV will be deleted when PVC is deleted.
-Recycle: Recycle policy performs a basic scrub (rm -rf /thevolume/*) on the volume and makes it available again for a new claim.
+**persistentVolumeReclaimPolicy: 
+
+Reclaim policy is what happens to the data stored in PV when PVC is deleted. Different Reclaim Policies Are:
+**Retain:
+
+PV will continue to retain even if PVC is deleted.
+**Delete: 
+
+PV will be deleted when PVC is deleted.
+**Recycle: 
+
+Recycle policy performs a basic scrub (rm -rf /thevolume/*) on the volume and makes it available again for a new claim.
 Save YAML file named: dbpv.yaml
 
 # Create a PV onto the cluster :
@@ -90,7 +104,8 @@ spec:
  persistentVolumeReclaimPolicy: Recycle
  hostPath:
   path: "/mnt/wpvol"
-Save & Create a PV named wppv.yaml
+
+**Save & Create a PV named wppv.yaml
 
 kubectl create -f wppv.yaml
 Getting PV’s we just created
