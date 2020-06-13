@@ -24,11 +24,11 @@ Once Kubectl is configured, let’s setup our backend first, we will start by cr
 Lets configure our Node first by creating directories that will be mounted as a persistent volume on Pods.
 
 To access our node, SSH into the node by
-a.minikube ssh
-b.sudo mkdir /mnt/sqlvol
-c.sudo mkdir /mnt/wpvol
-d.exit
-e.Listing Volumes
+a.minikube ssh<br/>
+b.sudo mkdir /mnt/sqlvol<br/>
+c.sudo mkdir /mnt/wpvol<br/>
+d.exit<br/>
+e.Listing Volumes<br/>
 
 # Persistent Volumes
 
@@ -42,123 +42,128 @@ To keep our promise of KISS, I am going to use Dynamic Provisioned Storage to cr
 Lets see this in action
 
 # Create a PV with this configuration
- <p>apiVersion: v1</p>
- </p>kind: PersistentVolume</p>
-metadata:
- name: dbvolume
-spec:
- storageClassName: fast
- capacity:
-  storage: 2Gi
- accessModes:
- - ReadWriteOnce
- persistentVolumeReclaimPolicy: Recycle
- hostPath:
-  path: "/mnt/sqlvol"
+ apiVersion: v1<br/>
+ kind: PersistentVolume<br/>
+metadata:<br/>
+ name: dbvolume<br/>
+spec:<br/>
+ storageClassName: fast<br/>
+ capacity:<br/>
+  storage: 2Gi<br/>
+ accessModes:<br/>
+ - ReadWriteOnce<br/>
+ persistentVolumeReclaimPolicy: Recycle<br/>
+ hostPath:<br/>
+  path: "/mnt/sqlvol"<br/>
   
 Understading few parameters used in here:
-# storageClassName: This dynamically allotes the type of storage we need that is available on the cluster. We can manually create our storage classes as well.
+# storageClassName: 
+This dynamically allotes the type of storage we need that is available on the cluster. We can manually create our storage classes as well.
 
-# accessModes: Different resource providers provide different access modes based on the capabilities (remember every storage class provider have different capabilities). Different accessModes are:
+# accessModes:
+Different resource providers provide different access modes based on the capabilities (remember every storage class provider have different capabilities). Different accessModes are:
 
 **ReadWriteOnce: 
 
-the volume can be mounted as read-write by a single node
-**ReadOnlyMany: 
+the volume can be mounted as read-write by a single node<br/>
+**ReadOnlyMany: <br/>
 
-the volume can be mounted read-only by many nodes
-**ReadWriteMany: 
+the volume can be mounted read-only by many nodes<br/>
+**ReadWriteMany: <br/>
 
-the volume can be mounted as read-write by many nodes
-(Since we are using hostPath as a Volume Plugin we are limited to ReadWriteOnce )
-**persistentVolumeReclaimPolicy: 
+the volume can be mounted as read-write by many nodes<br/>
+(Since we are using hostPath as a Volume Plugin we are limited to ReadWriteOnce )<br/>
+**persistentVolumeReclaimPolicy: <br/>
 
-Reclaim policy is what happens to the data stored in PV when PVC is deleted. Different Reclaim Policies Are:
-**Retain:
+Reclaim policy is what happens to the data stored in PV when PVC is deleted. Different Reclaim Policies Are:<br/>
+**Retain:<br/>
 
-PV will continue to retain even if PVC is deleted.
-**Delete: 
+PV will continue to retain even if PVC is deleted.<br/>
+**Delete: <br/>
 
-PV will be deleted when PVC is deleted.
-**Recycle: 
+PV will be deleted when PVC is deleted.<br/>
+**Recycle:<br/> 
 
-Recycle policy performs a basic scrub (rm -rf /thevolume/*) on the volume and makes it available again for a new claim.
-Save YAML file named: dbpv.yaml
+Recycle policy performs a basic scrub (rm -rf /thevolume/*) on the volume and makes it available again for a new claim.<br/>
+Save YAML file named: dbpv.yaml<br/>
 
-# Create a PV onto the cluster :
+# Create a PV onto the cluster :<br/>
 
-  **kubectl create -f dbpv.yaml
+  **kubectl create -f dbpv.yaml<br/>
 
-# Similarly Creating A Persistent Volume for WordPress Pod
+# Similarly Creating A Persistent Volume for WordPress Pod<br/>
 
 apiVersion: v1<br/>
 kind: PersistentVolume<br/>
 metadata:<br/>
- name: wpvolume
-spec:
- storageClassName: slow
- capacity:
-  storage: 2Gi
- accessModes:
-  - ReadWriteOnce
- persistentVolumeReclaimPolicy: Recycle
- hostPath:
-  path: "/mnt/wpvol"
+ name: wpvolume<br/>
+spec:<br/>
+ storageClassName: slow<br/>
+ capacity:<br/>
+  storage: 2Gi<br/>
+ accessModes:<br/>
+  - ReadWriteOnce<br/>
+ persistentVolumeReclaimPolicy: Recycle<br/>
+ hostPath:<br/>
+  path: "/mnt/wpvol"<br/>
 
 **Save & Create a PV named wppv.yaml
 
-kubectl create -f wppv.yaml
-Getting PV’s we just created
-kubectl get pv
+kubectl create -f wppv.yaml<br/>
+Getting PV’s we just created<br/>
+kubectl get pv<br/>
 
-# Persistent Volume Claims
+# Persistent Volume Claims<br/>
 A Persistent Volume Claim (PVC) as defined is a request for storage to a Persistent Volume. PVC provides an abstraction layer to the underlying storage. In our case, we can ask for storage amount, based on the characteristics of storage from a persistent volume. PVC’s are mostly created by developers to store the data persistently on volumes based on different characteristics and properties of volumes they need.
 
-Lets create a claim for the above volumes we created, Shall We 😀
+Lets create a claim for the above volumes we created, Shall We 😀<br/>
 
-# PVC for WordPress named wppvc.yaml
+# PVC for WordPress named wppvc.yaml<br/>
 
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
- name: wpclaim
-spec:
- storageClassName: slow
- accessModes:
- - ReadWriteOnce
- resources:
-  requests:
-   storage: 1Gi
+apiVersion: v1<br/>
+kind: PersistentVolumeClaim<br/>
+metadata:<br/>
+ name: wpclaim<br/>
+spec:<br/>
+ storageClassName: slow<br/>
+ accessModes:<br/>
+ - ReadWriteOnce<br/>
+ resources:<br/>
+  requests:<br/>
+   storage: 1Gi<br/>
    
-kubectl create -f wppvc.yaml
-Simlarly, Creating a PVC for MySQL named sqlpvc.yaml
+kubectl create -f wppvc.yaml<br/>
+Simlarly, Creating a PVC for MySQL named sqlpvc.yaml<br/>
 
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
- name: sqlclaim
-spec:
- storageClassName: fast
- accessModes:
- - ReadWriteOnce
- resources:
-  requests:
-   storage: 1Gi
+apiVersion: v1<br/>
+kind: PersistentVolumeClaim<br/>
+metadata:<br/>
+ name: sqlclaim<br/>
+spec:<br/>
+ storageClassName: fast<br/>
+ accessModes:<br/>
+ - ReadWriteOnce<br/>
+ resources:<br/>
+  requests:<br/>
+   storage: 1Gi<br/>
    
-**kubectl create -f sqlpvc.yaml
-Getting PVC’s we just created
-**kubectl get pvc
+**kubectl create -f sqlpvc.yaml<br/>
+Getting PVC’s we just created<br/>
+**kubectl get pvc<br/>
 
-# Secrets
+# Secrets<br/>
 Secrets is an api-resource that provides the security to our sensitive data such as passwords, tokens & credentials. Secrets are useful when we need some credentials that are sensitive but need to be passed in pod without anyone actually seeing the actual information. In our case, since we are using mysql docker image we also need to provide MySQL Root Password. Since its best practice to always hide sensitive information, lets create the same
 
-**kubectl create secret generic sqlpass --from-literal p=pass123
+**kubectl create secret generic sqlpass --from-literal p=pass123<br/>
 
 Lets understand the paramters used to create a secret:
-–from-literal: This is a type to create a secret in key-value pairs. Another type is –from-file
+**–from-literal: 
+This is a type to create a secret in key-value pairs. Another type is –from-file
+
 p is the key for the secret
 pass=123 is the password (Highly Secured -,-)
 Getting Secret We Just Created
+
 **kubectl get secrets
 
 # Deployments
@@ -166,90 +171,95 @@ Deployments is also an api- resource provided by Kubernetes that allows to descr
 
 Lets get started by creating a Deployment of MySQL named wpdb.yaml . I hope you guys are still doing with me 😀
 
-apiVersion: apps/v1 
-kind: Deployment
-metadata:
- labels:
-  app: appdb
- name: appdb
-spec:
- replicas: 1
- selector:
-  matchLabels:
-   app: appdb
- template:
-  metadata:
-   labels:
-    app: appdb
-  spec:
-   volumes:
-    - name: dbvol
-      persistentVolumeClaim:
-       claimName: sqlclaim
-   containers:
-    - image: mysql:5.6
-      name: mysql
-      volumeMounts:
-       - name: dbvol
-         mountPath: /var/lib/mysql
-      env:
-       - name: MYSQL_ROOT_PASSWORD
-         valueFrom:
-          secretKeyRef:
-           name: sqlpass
-           key: p
+apiVersion: apps/v1 <br/>
+kind: Deployment<br/>
+metadata:<br/>
+ labels:<br/>
+  app: appdb<br/>
+ name: appdb<br/>
+spec:<br/>
+ replicas: 1<br/>
+ selector:<br/>
+  matchLabels:<br/>
+   app: appdb<br/>
+ template:<br/>
+  metadata:<br/>
+   labels:<br/>
+    app: appdb<br/>
+  spec:<br/>
+   volumes:<br/>
+    - name: dbvol<br/>
+      persistentVolumeClaim:<br/>
+       claimName: sqlclaim<br/>
+   containers:<br/>
+    - image: mysql:5.6<br/>
+      name: mysql<br/>
+      volumeMounts:<br/>
+       - name: dbvol<br/>
+         mountPath: /var/lib/mysql<br/>
+      env:<br/>
+       - name: MYSQL_ROOT_PASSWORD<br/>
+         valueFrom:<br/>
+          secretKeyRef:<br/>
+           name: sqlpass<br/>
+           key: p<br/>
+           
 Notice how are we attaching the volume using persistentVolumeClaim & attaching it to the pod using volumeMounts
-Did you notice, how we passed our secret using secretkeyRef using our sqlpass secrets & using p as a key for our password.
-kubectl create -f wpdb.yaml
-Exposing MySQL Deployment
+Did you notice, how we passed our secret using secretkeyRef using our sqlpass secrets & using p as a key for our password.<br/>
+
+kubectl create -f wpdb.yaml<br/>
+
+**Exposing MySQL Deployment
+
 kubectl expose deploy appdb --type=ClusterIP --port=3306
 –type=ClusterIP: ClusterIP expose the pod internally to the cluster i.e. the scope of ClusterIP is interal network only.
 –port=3306: Port at which MySQL Service runs
 Similarly Creating Our WordPress Deployment named wpapp.yaml
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
- labels:
-  app: wordpress
- name: wordpress
-spec:
- replicas: 1
- selector:
-  matchLabels:
-   app: wordpress
- template:
-  metadata:
-   labels:
-    app: wordpress
-  spec:
-   volumes:
-    - name: frontvol
-      persistentVolumeClaim:
-       claimName: wpclaim
-   containers:
-    - image: wordpress:4.8-apache
-      name: wordpress
-      ports:
-       - containerPort: 80
-      volumeMounts:
-       - name: frontvol
-         mountPath: /var/www/html/
-      env:
-       - name: WORDPRESS_DB_HOST 
-         value: appdb
-       - name: WORDPRESS_DB_PASSWORD
-         valueFrom:
-          secretKeyRef:
-           name: sqlpass
-           key: p
+apiVersion: apps/v1<br/>
+kind: Deployment<br/>
+metadata:<br/>
+ labels:<br/>
+  app: wordpress<br/>
+ name: wordpress<br/>
+spec:<br/>
+ replicas: 1<br/>
+ selector:<br/>
+  matchLabels:<br/>
+   app: wordpress<br/>
+ template:<br/>
+  metadata:<br/>
+   labels:<br/>
+    app: wordpress<br/>
+  spec:<br/>
+   volumes:<br/>
+    - name: frontvol<br/>
+      persistentVolumeClaim:<br/>
+       claimName: wpclaim<br/>
+   containers:<br/>
+    - image: wordpress:4.8-apache<br/>
+      name: wordpress<br/>
+      ports:<br/>
+       - containerPort: 80<br/>
+      volumeMounts:<br/>
+       - name: frontvol<br/>
+         mountPath: /var/www/html/<br/>
+      env:<br/>
+       - name: WORDPRESS_DB_HOST <br/>
+         value: appdb<br/>
+       - name: WORDPRESS_DB_PASSWORD<br/>
+         valueFrom:<br/>
+          secretKeyRef:<br/>
+           name: sqlpass<br/>
+           key: p<br/>
 Notice how we are creating a volume using persistentVolumeClaim & mounting that volume using volumeMounts under mountPath /var/www/html (Default apache directory)
 Notice WORDPRESS_DB_HOST environment variable that is referred to appdb MySQL Service that we just created & WORDPRESS_DB_PASSWORD that is provided by the secret we created.
 kubectl create -f wpapp.yaml
 Getting The Deployments
 kubectl get deploy
 
-Exposing WordPress Deployment
+**Exposing WordPress Deployment
+
 kubectl expose deploy wordpress --type=NodePort --port=80
 –type=NodePort: NodePort Exposes A Service To a Node & that service can be accessed by accessing Node IP and port number at which it is exposed.
 –port=80: Apache Service Runs By Default on Port 80
@@ -260,7 +270,7 @@ Find The desired service wordpress & Copy The NodePort
 Accessing WordPress
 Since minikube provides us with a single node cluster, exposed services can be accessed by getting the IP address of minikube
 
-**minikube ip
+**minikube ip<br/>
 
-**Accessing WordPress From Browser
-**Browsing URL at 172.17.0.3:30225
+**Accessing WordPress From Browser<br/>
+**Browsing URL at 172.17.0.3:30225<br/>
