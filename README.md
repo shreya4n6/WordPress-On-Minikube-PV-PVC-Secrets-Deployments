@@ -13,4 +13,5 @@ Installing WordPress On Kubernetes.
 # Prerequisites
 
 1.Minikube Installed
+
 2.Kubectl configured with Minikube
