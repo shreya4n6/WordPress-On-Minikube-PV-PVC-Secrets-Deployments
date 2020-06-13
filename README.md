@@ -91,9 +91,9 @@ Save YAML file named: dbpv.yaml
 
 # Similarly Creating A Persistent Volume for WordPress Pod
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
+apiVersion: v1<br/>
+kind: PersistentVolume<br/>
+metadata:<br/>
  name: wpvolume
 spec:
  storageClassName: slow
@@ -166,7 +166,7 @@ Deployments is also an api- resource provided by Kubernetes that allows to descr
 
 Lets get started by creating a Deployment of MySQL named wpdb.yaml . I hope you guys are still doing with me 😀
 
-apiVersion: apps/v1 /n
+apiVersion: apps/v1 
 kind: Deployment
 metadata:
  labels:
