@@ -1,6 +1,6 @@
 # WordPress-On-Minikube-PV-PVC-Secrets-Deployments
 
-TL; DR
+# TL; DR
 
 Installing WordPress On Kubernetes.
 
@@ -12,5 +12,5 @@ Installing WordPress On Kubernetes.
 
 # Prerequisites
 
-# Minikube Installed
-# Kubectl configured with Minikube
+1.Minikube Installed
+2.Kubectl configured with Minikube
